@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>手写数字识别</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+</head>
+
+<body>
+<h1>卷积神经网络 & MNIST 手写数字识别demo</h1>
+<div class="centered">
+    <canvas id="canvas" width="80" height="80"></canvas>
+</div>
+
+<div class="centered">
+    <canvas width="80" height="80"></canvas>
+</div>
+
+<div class="centered">
+    <input type="button" class="myButton" value="预测" style="">
+    <input type="button" id="clearButton" value="清除" style="">
+</div>
+
+<div class="centered">
+    <h1 id="result"></h1>
+</div>
+
+<script src="{{url_for('static',filename='jquery-3.2.0.min.js')}}"></script>
+<script src="{{url_for('static',filename='index.js')}}"></script>
+
+<script type="text/javascript">
+   // 当页面上的元素类名为 "myButton" 的按钮被点击时执行以下代码
+   $(".myButton").click(function(){
+      // 在页面上的 id 为 "result" 的元素中显示 "Predicting..." 文字
+      $('#result').text('  Predicting...');
+
+      // 获取页面上 id 为 "canvas" 的元素
+      var canvasObj = document.getElementById("canvas");
+
+      // 将Canvas中绘制的图像转换为PNG格式的Base64编码的字符串
+      var img = canvasObj.toDataURL('image/png');
+
+      // 获取服务器端的脚本根路径
+      var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+
+      // 发送POST请求到服务器的 "/predict/" 路径，并携带图像数据
+      $.ajax({
+         type: "POST",
+         url: $SCRIPT_ROOT + "/predict/",
+         data: img,
+         // 请求成功时执行以下代码
+         success: function(data){
+            // 在页面上的 id 为 "result" 的元素中显示预测结果
+            $('#result').text('预测结果: ' + data);
+         }
+      });
+   });
+</script>
+
+</body>
+</html>
