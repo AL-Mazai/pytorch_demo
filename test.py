@@ -1,4 +1,3 @@
-from model.model import Model
 import numpy as np
 import torch
 from torchvision.datasets import mnist
@@ -7,6 +6,8 @@ from torch.utils.data import DataLoader
 from torchvision.transforms import ToTensor
 import matplotlib.pyplot as plt
 from sklearn.metrics import precision_recall_curve, roc_curve, f1_score, precision_recall_fscore_support
+
+from ResidualNetTrain import ResidualNet
 
 
 def normalization(data):
@@ -18,11 +19,11 @@ if __name__ == '__main__':
     # 设置 batch_size 为 1，表示每次只测试一个样本
     batch_size = 1
     # 创建用于测试的 MNIST 数据集
-    test_dataset = mnist.MNIST(root='./DataSet', train=False, transform=ToTensor())
+    test_dataset = mnist.MNIST(root='data', train=False, transform=ToTensor())
     # 创建测试数据加载器
     test_loader = DataLoader(test_dataset, batch_size=batch_size)
     # 初始化神经网络模型
-    model = Model()
+    model = ResidualNet()
     # 加载预训练模型权重
     model.load_state_dict(torch.load('model/mnist.pth'))
     # 设置阈值，用于决定模型对于每个样本的预测是否为正类别

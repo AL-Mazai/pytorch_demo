@@ -6,11 +6,12 @@ from flask_cors import CORS  # 导入CORS模块
 import numpy as np
 from PIL import Image
 import torchvision.transforms as transforms
-from model.model import Model
+
+from ResidualNetTrain import ResidualNet
 
 # 加载预训练的神经网络模型
 model = torch.load('model/mnist.pth')
-net = Model()
+net = ResidualNet()
 net.load_state_dict(model)
 
 app = Flask(__name__)
@@ -43,6 +44,7 @@ def predict():
     predict_ys = np.argmax(predict_y, axis=-1)
     ans = predict_ys.item()
 
+    print("ans:", ans)
     # 打印预测概率
     print(predict_y)
     print(predict_y.numpy().squeeze()[ans])
